@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-primary: #f8fafc;
+  --bg-secondary: #ffffff;
+  --text-primary: #1e293b;
+  --text-secondary: #64748b;
+}
+
+html.dark {
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --text-primary: #f1f5f9;
+  --text-secondary: #cbd5e1;
+}
+
+* {
+  @apply transition-colors duration-200;
+}
+
+html {
+  @apply scroll-smooth;
+}
+
+body {
+  @apply bg-aeco-light-bg dark:bg-aeco-dark-bg text-aeco-light-text dark:text-aeco-dark-text;
+  font-family: 'Segoe UI', Roboto, sans-serif;
+}

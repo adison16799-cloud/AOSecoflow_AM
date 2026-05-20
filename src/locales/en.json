@@ -1,0 +1,22 @@
+{
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "loading": "Loading..."
+  },
+  "navigation": {
+    "dashboard": "Dashboard",
+    "wasteOrder": "Waste Orders",
+    "vendor": "Vendors",
+    "billing": "Billing",
+    "esg": "ESG & Reports",
+    "settings": "Settings"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "subtitle": "Waste Management & ESG Overview"
+  }
+}

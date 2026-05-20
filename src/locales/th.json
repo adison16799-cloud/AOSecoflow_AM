@@ -1,0 +1,22 @@
+{
+  "common": {
+    "save": "บันทึก",
+    "cancel": "ยกเลิก",
+    "delete": "ลบ",
+    "edit": "แก้ไข",
+    "add": "เพิ่ม",
+    "loading": "กำลังโหลด..."
+  },
+  "navigation": {
+    "dashboard": "แสดงข้อมูล",
+    "wasteOrder": "ตามรวจสินค้า",
+    "vendor": "ผู้บริหาร",
+    "billing": "การเรียกเก็บ",
+    "esg": "ระบบสารถ",
+    "settings": "การตั้งค่า"
+  },
+  "dashboard": {
+    "title": "แสดงข้อมูล",
+    "subtitle": "ภาพรวมการจัดการขยะและ ESG"
+  }
+}
