@@ -1,20 +1,29 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useLanguage } from '../../contexts/LanguageContext';
+import { usePermission } from '../../hooks/usePermission';
+import { PERMISSIONS } from '../../utils/roles';
 
 const menuItems = [
-  { id: 'dashboard', label: 'navigation.dashboard', path: '/', icon: '📊' },
-  { id: 'waste', label: 'navigation.wasteOrder', path: '/waste-orders', icon: '♻️' },
-  { id: 'vendor', label: 'navigation.vendor', path: '/vendors', icon: '🏢' },
-  { id: 'billing', label: 'navigation.billing', path: '/billing', icon: '💳' },
-  { id: 'esg', label: 'navigation.esg', path: '/esg', icon: '🌍' },
-  { id: 'settings', label: 'navigation.settings', path: '/settings', icon: '⚙️' },
+  { id: 'dashboard', label: 'navigation.dashboard', path: '/', icon: '📊', permission: null },
+  { id: 'waste', label: 'navigation.wasteOrder', path: '/waste-orders', icon: '♻️', permission: PERMISSIONS.VIEW_WASTE_ORDERS },
+  { id: 'vendor', label: 'navigation.vendor', path: '/vendors', icon: '🏢', permission: PERMISSIONS.VIEW_VENDORS },
+  { id: 'billing', label: 'navigation.billing', path: '/billing', icon: '💳', permission: PERMISSIONS.VIEW_BILLING },
+  { id: 'pricing', label: 'Pricing', path: '/pricing', icon: '💰', permission: PERMISSIONS.VIEW_PRICING },
+  { id: 'esg', label: 'navigation.esg', path: '/esg', icon: '🌍', permission: PERMISSIONS.VIEW_ESG },
+  { id: 'settings', label: 'navigation.settings', path: '/settings', icon: '⚙️', permission: null },
 ];
 
 export const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
   const { t } = useLanguage();
   const location = useLocation();
+  const { can } = usePermission();
 
   const isActive = (path) => location.pathname === path;
+
+  // Filter menu items based on permissions
+  const visibleMenuItems = menuItems.filter(item =>
+    !item.permission || can(item.permission)
+  );
 
   return (
     <>
@@ -55,7 +64,7 @@ export const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
         {/* Menu */}
         <nav className="flex-1 px-3 py-4 overflow-y-auto">
           <div className="space-y-1">
-            {menuItems.map((item) => {
+            {visibleMenuItems.map((item) => {
               const active = isActive(item.path);
               return (
                 <Link
@@ -73,7 +82,7 @@ export const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
                   `}
                 >
                   <span className="text-lg">{item.icon}</span>
-                  <span>{t(item.label)}</span>
+                  <span>{item.label === 'Pricing' ? item.label : t(item.label)}</span>
                 </Link>
               );
             })}

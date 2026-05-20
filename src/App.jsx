@@ -7,6 +7,12 @@ import { ProtectedRoute } from './components/ProtectedRoute';
 import { Login } from './pages/Login';
 import { Register } from './pages/Register';
 import { Dashboard } from './pages/Dashboard';
+import { WasteOrders } from './pages/WasteOrders';
+import { Vendors } from './pages/Vendors';
+import { Billing } from './pages/Billing';
+import { Pricing } from './pages/Pricing';
+import { ESGReports } from './pages/ESGReports';
+import { Settings } from './pages/Settings';
 
 function AppContent() {
   return (
@@ -23,6 +29,72 @@ function AppContent() {
             <ProtectedRoute>
               <AppLayout>
                 <Dashboard />
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/waste-orders"
+          element={
+            <ProtectedRoute>
+              <AppLayout>
+                <WasteOrders />
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/vendors"
+          element={
+            <ProtectedRoute>
+              <AppLayout>
+                <Vendors />
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/billing"
+          element={
+            <ProtectedRoute>
+              <AppLayout>
+                <Billing />
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/pricing"
+          element={
+            <ProtectedRoute>
+              <AppLayout>
+                <Pricing />
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/esg"
+          element={
+            <ProtectedRoute>
+              <AppLayout>
+                <ESGReports />
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute>
+              <AppLayout>
+                <Settings />
               </AppLayout>
             </ProtectedRoute>
           }
