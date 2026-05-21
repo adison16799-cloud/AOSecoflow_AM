@@ -1,4 +1,3 @@
-cat > src/hooks/usePermission.js << 'EOF'
 import { useAuth } from '../contexts/AuthContext';
 import { hasPermission, hasAnyPermission, hasAllPermissions } from '../utils/roles';
 
@@ -10,7 +9,7 @@ export const usePermission = () => {
     if (user?.email === 'admin@aosecoflow.com') return 'admin';
     if (user?.email === 'seller@aosecoflow.com') return 'seller';
     if (user?.email === 'viewer@aosecoflow.com') return 'viewer';
-    return 'viewer'; // default for demo accounts
+    return 'viewer';
   };
 
   const userRole = getUserRole();
@@ -36,4 +35,3 @@ export const usePermission = () => {
 };
 
 export default usePermission;
-EOF
