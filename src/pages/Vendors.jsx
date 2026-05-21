@@ -1,28 +1,18 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { DataTable } from '../components/common/DataTable';
 import { Button } from '../components/common/Button';
 import { Modal } from '../components/common/Modal';
 import { Input } from '../components/common/Input';
 import { Badge } from '../components/common/Badge';
-
-const mockVendors = [
-  { id: 1, name: 'Green Waste Co.', type: 'Hauler', phone: '02-xxx-xxxx', email: 'info@greenwaste.com', rating: 4.8, status: 'Active' },
-  { id: 2, name: 'Eco Recycling', type: 'Recycler', phone: '02-yyy-yyyy', email: 'contact@ecorecycle.com', rating: 4.6, status: 'Active' },
-  { id: 3, name: 'Clean Earth', type: 'Processor', phone: '02-zzz-zzzz', email: 'support@cleanearth.com', rating: 4.5, status: 'Inactive' },
-];
+import { PermissionGuard } from '../components/PermissionGuard';
+import { getVendors } from '../services/vendorsService';
+import { PERMISSIONS } from '../utils/roles';
 
 const tableColumns = [
   { key: 'name', label: 'Vendor Name' },
   { key: 'type', label: 'Type' },
   { key: 'phone', label: 'Phone' },
   { key: 'email', label: 'Email' },
-  {
-    key: 'rating',
-    label: 'Rating',
-    render: (rating) => (
-      <span className="text-aeco-warning font-semibold">⭐ {rating}</span>
-    ),
-  },
   {
     key: 'status',
     label: 'Status',
@@ -35,7 +25,8 @@ const tableColumns = [
 ];
 
 export const Vendors = () => {
-  const [vendors, setVendors] = useState(mockVendors);
+  const [vendors, setVendors] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -45,14 +36,24 @@ export const Vendors = () => {
     status: 'Active',
   });
 
+  useEffect(() => {
+    const fetchVendors = async () => {
+      try {
+        setLoading(true);
+        const data = await getVendors();
+        setVendors(data);
+      } catch (error) {
+        console.error('Failed to load vendors:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchVendors();
+  }, []);
+
   const handleAddVendor = () => {
     if (formData.name && formData.phone && formData.email) {
-      const newVendor = {
-        id: vendors.length + 1,
-        ...formData,
-        rating: 4.5,
-      };
-      setVendors([newVendor, ...vendors]);
       setFormData({ name: '', type: 'Hauler', phone: '', email: '', status: 'Active' });
       setIsModalOpen(false);
     }
@@ -62,29 +63,36 @@ export const Vendors = () => {
     setVendors(vendors.filter(v => v.id !== vendor.id));
   };
 
+  if (loading) {
+    return (
+      <div className="p-6 text-center">
+        <p>Loading vendors...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="p-6 space-y-6 max-w-7xl mx-auto">
-      {/* Header */}
       <div className="flex justify-between items-start">
         <div>
           <h1 className="text-3xl font-bold mb-2">🏢 Vendors</h1>
           <p className="text-aeco-light-text/60 dark:text-aeco-dark-text/60">
-            Manage waste management service providers
+            Manage waste management service providers ({vendors.length} total)
           </p>
         </div>
-        <Button onClick={() => setIsModalOpen(true)}>
-          ➕ Add Vendor
-        </Button>
+        <PermissionGuard permission={PERMISSIONS.CREATE_VENDOR}>
+          <Button onClick={() => setIsModalOpen(true)}>
+            ➕ Add Vendor
+          </Button>
+        </PermissionGuard>
       </div>
 
-      {/* Table */}
       <DataTable
         columns={tableColumns}
         data={vendors}
         onDelete={handleDelete}
       />
 
-      {/* Modal */}
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
