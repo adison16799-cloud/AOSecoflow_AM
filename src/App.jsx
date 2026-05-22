@@ -1,28 +1,41 @@
+import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { ThemeProvider } from './contexts/ThemeContext';
-import { LanguageProvider } from './contexts/LanguageContext';
-import { AuthProvider } from './contexts/AuthContext';
+import { useAuth } from './contexts/AuthContext';
 import { AppLayout } from './components/layout/AppLayout';
-import { ProtectedRoute } from './components/ProtectedRoute';
 import { Login } from './pages/Login';
 import { Register } from './pages/Register';
 import { Dashboard } from './pages/Dashboard';
 import { WasteOrders } from './pages/WasteOrders';
+import { OrderDetail } from './pages/OrderDetail';
 import { Vendors } from './pages/Vendors';
 import { Billing } from './pages/Billing';
 import { Pricing } from './pages/Pricing';
 import { ESGReports } from './pages/ESGReports';
 import { Settings } from './pages/Settings';
 
-function AppContent() {
+const ProtectedRoute = ({ children }) => {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
+  }
+
+  return user ? children : <Navigate to="/login" />;
+};
+
+export default function App() {
+  const { loading } = useAuth();
+
+  if (loading) {
+    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
+  }
+
   return (
     <Router>
       <Routes>
-        {/* Public Routes */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        {/* Protected Routes */}
         <Route
           path="/"
           element={
@@ -40,6 +53,17 @@ function AppContent() {
             <ProtectedRoute>
               <AppLayout>
                 <WasteOrders />
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/waste-orders/:orderId"
+          element={
+            <ProtectedRoute>
+              <AppLayout>
+                <OrderDetail />
               </AppLayout>
             </ProtectedRoute>
           }
@@ -100,23 +124,8 @@ function AppContent() {
           }
         />
 
-        {/* Catch all - redirect to dashboard */}
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Router>
   );
 }
-
-function App() {
-  return (
-    <AuthProvider>
-      <ThemeProvider>
-        <LanguageProvider>
-          <AppContent />
-        </LanguageProvider>
-      </ThemeProvider>
-    </AuthProvider>
-  );
-}
-
-export default App;

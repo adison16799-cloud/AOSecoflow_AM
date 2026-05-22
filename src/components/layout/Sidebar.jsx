@@ -4,97 +4,64 @@ import { usePermission } from '../../hooks/usePermission';
 import { PERMISSIONS } from '../../utils/roles';
 
 const menuItems = [
-  { id: 'dashboard', label: 'navigation.dashboard', path: '/', icon: '📊', permission: null },
-  { id: 'waste', label: 'navigation.wasteOrder', path: '/waste-orders', icon: '♻️', permission: PERMISSIONS.VIEW_WASTE_ORDERS },
-  { id: 'vendor', label: 'navigation.vendor', path: '/vendors', icon: '🏢', permission: PERMISSIONS.VIEW_VENDORS },
-  { id: 'billing', label: 'navigation.billing', path: '/billing', icon: '💳', permission: PERMISSIONS.VIEW_BILLING },
-  { id: 'pricing', label: 'Pricing', path: '/pricing', icon: '💰', permission: PERMISSIONS.VIEW_PRICING },
-  { id: 'esg', label: 'navigation.esg', path: '/esg', icon: '🌍', permission: PERMISSIONS.VIEW_ESG },
-  { id: 'settings', label: 'navigation.settings', path: '/settings', icon: '⚙️', permission: null },
+  { id: 'dashboard', label: 'Dashboard', path: '/', icon: '📊', permission: null },
+  { id: 'waste', label: 'Waste Orders', path: '/waste-orders', icon: '♻️', permission: null },
+  { id: 'vendor', label: 'Vendors', path: '/vendors', icon: '🏢', permission: null },
+  { id: 'billing', label: 'Billing', path: '/billing', icon: '💳', permission: null },
+  { id: 'pricing', label: 'Pricing', path: '/pricing', icon: '💰', permission: null },
+  { id: 'esg', label: 'ESG & Reports', path: '/esg', icon: '🌍', permission: null },
+  { id: 'settings', label: 'Settings', path: '/settings', icon: '⚙️', permission: null },
 ];
 
-export const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
-  const { t } = useLanguage();
+export const Sidebar = () => {
   const location = useLocation();
-  const { can } = usePermission();
 
   const isActive = (path) => location.pathname === path;
 
-  // Filter menu items based on permissions
-  const visibleMenuItems = menuItems.filter(item =>
-    !item.permission || can(item.permission)
-  );
-
   return (
-    <>
-      {/* Mobile Overlay */}
-      {isOpen && (
-        <div
-          className="fixed inset-0 bg-black/50 lg:hidden z-40"
-          onClick={onClose}
-        />
-      )}
-
-      {/* Sidebar */}
-      <aside
-        className={`
-          fixed left-0 top-0 h-screen w-64 bg-aeco-dark-card dark:bg-aeco-dark-card
-          border-r border-aeco-dark-border
-          flex flex-col z-50 transition-all duration-300
-          lg:relative lg:translate-x-0 lg:z-0
-          ${isOpen ? 'translate-x-0' : '-translate-x-full'}
-        `}
-      >
-        {/* Logo */}
-        <div className="h-16 flex items-center justify-between px-4 border-b border-aeco-dark-border">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-aeco-cyan rounded-lg flex items-center justify-center text-white font-bold">
-              🌍
-            </div>
-            <span className="font-bold text-white">AOSecoflow</span>
+    <div className="w-full h-full flex flex-col">
+      {/* Logo */}
+      <div className="h-16 flex items-center px-4 border-b border-aeco-dark-border">
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 bg-aeco-cyan rounded-lg flex items-center justify-center text-white font-bold text-sm">
+            🌍
           </div>
-          <button
-            onClick={onClose}
-            className="lg:hidden text-aeco-cyan hover:bg-aeco-dark-border rounded-md p-1"
-          >
-            ✕
-          </button>
+          <span className="font-bold text-white text-sm">AOSecoflow</span>
         </div>
+      </div>
 
-        {/* Menu */}
-        <nav className="flex-1 px-3 py-4 overflow-y-auto">
-          <div className="space-y-1">
-            {visibleMenuItems.map((item) => {
-              const active = isActive(item.path);
-              return (
-                <Link
-                  key={item.id}
-                  to={item.path}
-                  onClick={() => onClose()}
-                  className={`
-                    w-full flex items-center gap-3 px-3 py-2.5 rounded-lg
-                    transition-all duration-200 text-sm font-medium
-                    ${
-                      active
-                        ? 'bg-aeco-cyan text-white shadow-md'
-                        : 'text-aeco-cyan/70 hover:text-aeco-cyan hover:bg-aeco-dark-border/50'
-                    }
-                  `}
-                >
-                  <span className="text-lg">{item.icon}</span>
-                  <span>{item.label === 'Pricing' ? item.label : t(item.label)}</span>
-                </Link>
-              );
-            })}
-          </div>
-        </nav>
-
-        {/* Footer */}
-        <div className="border-t border-aeco-dark-border px-4 py-3 text-xs text-aeco-cyan/50">
-          <p>AOSecoflow v1.0</p>
+      {/* Menu */}
+      <nav className="flex-1 overflow-y-auto px-2 py-4">
+        <div className="space-y-2">
+          {menuItems.map((item) => {
+            const active = isActive(item.path);
+            return (
+              <Link
+                key={item.id}
+                to={item.path}
+                className={`
+                  w-full flex items-center gap-3 px-3 py-2.5 rounded-lg
+                  transition-colors duration-200 text-sm font-medium
+                  ${
+                    active
+                      ? 'bg-aeco-cyan text-white'
+                      : 'text-aeco-cyan/70 hover:text-aeco-cyan hover:bg-aeco-dark-border'
+                  }
+                `}
+              >
+                <span className="text-lg w-5">{item.icon}</span>
+                <span>{item.label}</span>
+              </Link>
+            );
+          })}
         </div>
-      </aside>
-    </>
+      </nav>
+
+      {/* Footer */}
+      <div className="border-t border-aeco-dark-border px-4 py-3">
+        <p className="text-xs text-aeco-cyan/50">AOSecoflow v1.0</p>
+      </div>
+    </div>
   );
 };
 
