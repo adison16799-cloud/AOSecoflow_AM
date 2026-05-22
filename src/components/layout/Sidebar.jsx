@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useLanguage } from '../contexts/LanguageContext';
-import { usePermission } from '../hooks/usePermission';
+import { useLanguage } from '../../contexts/LanguageContext';
+import { usePermission } from '../../hooks/usePermission';
 import {
   LayoutDashboard,
   Trash2,
