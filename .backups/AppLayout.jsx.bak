@@ -1,0 +1,28 @@
+import { Sidebar } from './Sidebar';
+import { Header } from './Header';
+
+export const AppLayout = ({ children }) => {
+  return (
+    <div style={{ display: 'flex', height: '100vh', width: '100%', overflow: 'hidden' }}>
+      {/* Sidebar */}
+      <div style={{ width: '280px', flexShrink: 0, overflowY: 'auto', backgroundColor: '#1e293b', borderRight: '1px solid #334155' }}>
+        <Sidebar />
+      </div>
+
+      {/* Main */}
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+        {/* Header */}
+        <div style={{ flexShrink: 0, borderBottom: '1px solid #334155', backgroundColor: '#1e293b' }}>
+          <Header />
+        </div>
+
+        {/* Content */}
+        <div style={{ flex: 1, overflowY: 'auto', backgroundColor: '#0f172a' }}>
+          <main>{children}</main>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default AppLayout;

@@ -1,26 +1,47 @@
+import { useState } from 'react';
 import { Sidebar } from './Sidebar';
 import { Header } from './Header';
 
-export const AppLayout = ({ children }) => {  
+export const AppLayout = ({ children }) => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const handleToggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
+
+  const handleCloseSidebar = () => {
+    setSidebarOpen(false);
+  };
+
   return (
-    <div className="flex h-screen bg-aeco-light-bg dark:bg-aeco-dark-bg">
-      {/* Sidebar - Fixed Width */}
-      <aside className="w-72 border-r border-aeco-light-border dark:border-aeco-dark-border bg-aeco-light-card dark:bg-aeco-dark-card overflow-y-auto flex-shrink-0">
-        <Sidebar />
+    <div className="flex h-screen w-full overflow-hidden bg-slate-950">
+      {/* Mobile Overlay */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-30 lg:hidden"
+          onClick={handleCloseSidebar}
+        />
+      )}
+
+      {/* Sidebar - Fixed on desktop, slide-in on mobile */}
+      <aside
+        className={`fixed lg:static top-0 left-0 h-screen w-64 bg-slate-900 border-r border-slate-700 transition-transform duration-300 z-40 ${
+          sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+        }`}
+      >
+        <Sidebar onClose={handleCloseSidebar} />
       </aside>
 
-      {/* Main Content */}
+      {/* Main Content Area */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
-        <header className="border-b border-aeco-light-border dark:border-aeco-dark-border bg-aeco-light-card dark:bg-aeco-dark-card flex-shrink-0">
-          <Header />
+        <header className="flex-shrink-0">
+          <Header onMenuToggle={handleToggleSidebar} />
         </header>
 
-        {/* Content */}
-        <main className="flex-1 overflow-y-auto">
-          <div className="h-full">
-            {children}
-          </div>
+        {/* Page Content */}
+        <main className="flex-1 overflow-y-auto bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
+          {children}
         </main>
       </div>
     </div>
