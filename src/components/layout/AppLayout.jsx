@@ -25,10 +25,10 @@ export const AppLayout = ({ children }) => {
 
       {/* Sidebar - Fixed on desktop, slide-in on mobile */}
       <aside
-        className={`fixed lg:static top-0 left-0 h-screen w-64 bg-slate-900 border-r border-slate-700 transition-transform duration-300 z-40 ${
+        className={`fixed lg:relative top-0 left-0 h-screen w-64 bg-slate-900 border-r border-slate-700 transition-transform duration-300 z-40 lg:z-auto ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
-        }`}
-      >
+      }`}
+    >
         <Sidebar onClose={handleCloseSidebar} />
       </aside>
 
